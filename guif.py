@@ -49,7 +49,7 @@ class Frame(wx.Frame):
         #self.Bind(wx.EVT_MENU, self.OnMirrorImage, self.mirrorMenuItem)
         
         # create a menu item for Exit and bind it to the OnExit function       
-        exitMenuItem = menuFile.Append(-1, 'E&xit', 'Exit the viewer')        
+        exitMenuItem = runMenuItem.Append(-1, 'E&xit', 'Exit the viewer')        
         self.Bind(wx.EVT_MENU, self.OnExit, exitMenuItem)
         
         # add a Help menu with an About item

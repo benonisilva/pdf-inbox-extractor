@@ -3,7 +3,7 @@ import mailbox, pickle, os
 from email.header import decode_header
 import string_util
 
-INBOX = r'C:\Users\jamesli\AppData\Roaming\Thunderbird\Profiles\fgvkk9zc.default\ImapMail\imap.googlemail.com\INBOX'
+INBOX = r''
 prefs_path = r'config'
 save_to = r'.'
 
@@ -44,7 +44,7 @@ def save_attachments(mid):
             f = bytes.decode(enc)
             #notify('Saving' % part.get_filename())
             directory = creat_userDir(prefs['dir'],sender_name)
-            with open(directory +'\\'+f, 'wb') as f:
+            with open(directory +'/'+f, 'wb') as f:
                 f.write(part.get_payload(decode=True))
             
 def run_script():

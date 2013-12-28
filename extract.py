@@ -15,9 +15,9 @@ except:
     prefs.update(dict(path=INBOX))
     prefs.update(dict(dir=save_to))
 
-print prefs
-mb = mailbox.mbox(prefs['path'])
-def save_attachments(mid):
+#print prefs
+
+def save_attachments(mid,mb):
     
     msg = mb.get_message(mid)
     #print msg 
@@ -49,10 +49,11 @@ def save_attachments(mid):
             
 def run_script():
     print 'running...\n'
+    mb = mailbox.mbox(prefs['path'])
     for i in range(prefs['start'], 1000000):
         try:
             #print i
-            save_attachments(i)
+            save_attachments(i,mb)
         except KeyError:
             break
     save_prefs('start',i)

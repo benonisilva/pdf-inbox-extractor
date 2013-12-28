@@ -33,7 +33,7 @@ class Frame(wx.Frame):
 
 
         menuFile = wx.Menu()
-        menuBar.Append(menuFile, '&Path')
+        menuBar.Append(menuFile, '&Destine directory')
         # NOTE on wx ids - they're used everywhere, we don't care about them
         # Used to handle events and other things
         # An id can be -1 or wx.ID_ANY, wx.NewId(), your own id

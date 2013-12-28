@@ -59,7 +59,7 @@ def run_script():
     save_prefs('start',i)
 
 def creat_userDir(path,user):
-    directory = path+'\\'+user  
+    directory = path+'/'+user  
     if not os.path.exists(directory):
         os.makedirs(directory)
     return directory    

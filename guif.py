@@ -15,6 +15,19 @@ class Frame(wx.Frame):
 
         self.CreateMenuBar()
 
+        self.statusbar = self.CreateStatusBar()
+        if(not extract.getIsConfig()):
+            self.statusbar.SetStatusText('Not configured')
+        else:
+            self.statusbar.SetStatusText('Configured')
+
+    def ToggleStatusBar(self, e):
+        
+        if self.shst.IsChecked():
+            self.statusbar.Show()
+        else:
+            self.statusbar.Hide()
+
     def CreateMenuBar(self):
         "Create a menu bar with Open, Exit items"
         menuBar = wx.MenuBar()
@@ -27,13 +40,13 @@ class Frame(wx.Frame):
         # Used to handle events and other things
         # An id can be -1 or wx.ID_ANY, wx.NewId(), your own id
         # Get the id using object.GetId()
-        runMenuItem = menuRun.Append(-1, '&Extract all pdf', 'Running')
+        runMenuItem = menuRun.Append(-1, '&Extract all pdf', 'Run...')
         #print "fileOpenMenuItem.GetId()", fileOpenMenuItem.GetId()
         self.Bind(wx.EVT_MENU, self.OnRun, runMenuItem)
 
 
         menuFile = wx.Menu()
-        menuBar.Append(menuFile, '&Destine directory')
+        menuBar.Append(menuFile, '&Path')
         # NOTE on wx ids - they're used everywhere, we don't care about them
         # Used to handle events and other things
         # An id can be -1 or wx.ID_ANY, wx.NewId(), your own id
@@ -58,16 +71,18 @@ class Frame(wx.Frame):
         helpMenuItem = menuHelp.Append(-1, '&Set path', 'Set path of INBOX file')
         self.Bind(wx.EVT_MENU, self.OnOpen, helpMenuItem)
 
+    
+
     def OnOpen(self, event):
         "Open an image file, set title if successful"
         # Create a file-open dialog in the current directory
         
-        #filters = 'Image files (*.gif;*.png;*.jpg)|*.gif;*.png;*.jpg'
+        filters = 'INBOX'
         #dlg = wx.FileDialog(self, message="Open an Image...", defaultDir=os.getcwd(), 
         #                    defaultFile="", wildcard=filters, style=wx.OPEN)
         
         dlg = wx.FileDialog(self, message="Open an INBOX...", defaultDir=os.getcwd(), 
-                            defaultFile="", style=wx.OPEN)
+                            defaultFile="",wildcard=filters, style=wx.OPEN)
         
         # Call the dialog as a model-dialog so we're required to choose Ok or Cancel
         if dlg.ShowModal() == wx.ID_OK:
@@ -78,7 +93,7 @@ class Frame(wx.Frame):
             #self.SetTitle(filename)
             #wx.BeginBusyCursor()            
             #wx.EndBusyCursor()
-                        
+        self.statusbar.SetStatusText('Configured')                
         dlg.Destroy() # we don't need the dialog any more so we ask it to clean-up
         
     def OnOpenPath(self, event):
@@ -101,7 +116,7 @@ class Frame(wx.Frame):
             #self.SetTitle(filename)
             #wx.BeginBusyCursor()            
             #wx.EndBusyCursor()
-                        
+        #self.statusbar.SetStatusText('Configured')                
         dlg.Destroy() # we don't need the dialog any more so we ask it to clean-up
 
 
@@ -113,8 +128,20 @@ class Frame(wx.Frame):
     def OnRun(self, event):
         "Close the application by Destroying the object"
         # TRY add in your own print call here
-        extract.run_script()
-        #self.Destroy() # SHOW HELP SIDEBAR    
+        if(not extract.getIsConfig()):
+            dial = wx.MessageDialog(None, 'Not configured', 'Info', wx.OK)
+            dial.ShowModal()
+        else:
+            extract.run_script()
+            #self.Destroy() # SHOW HELP SIDEBAR
+            self.statusbar.SetStatusText('Done')
+            dial = wx.MessageDialog(None, 'Successful saved', 'Info', wx.OK)
+            dial.ShowModal()   
+              
+
+
+        
+
         
     
 class App(wx.App):

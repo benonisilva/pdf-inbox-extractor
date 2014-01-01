@@ -6,19 +6,26 @@ import string_util
 INBOX = r''
 prefs_path = r'config'
 save_to = r'.'
+configured = False
+cont = 0
+
 
 try:
     with open(prefs_path, 'rb') as f:
         prefs = pickle.load(f)
+        configured = True
 except:
     prefs = dict(start=0)
     prefs.update(dict(path=INBOX))
     prefs.update(dict(dir=save_to))
 
 #print prefs
+def getIsConfig():
+    return configured
 
 def save_attachments(mid,mb):
-    
+    #cont = 0
+    #print mid
     msg = mb.get_message(mid)
     #print msg 
     if msg.is_multipart():
@@ -28,6 +35,7 @@ def save_attachments(mid,mb):
                 continue
             file_name = part.get_filename()
             sender_name = msg['from'].split()[0]
+            #cont+=1
             #print file_name
 
             try:
@@ -46,17 +54,22 @@ def save_attachments(mid,mb):
             directory = creat_userDir(prefs['dir'],sender_name)
             with open(directory +'/'+f, 'wb') as f:
                 f.write(part.get_payload(decode=True))
+    #return cont            
             
 def run_script():
     print 'running...\n'
+    
     mb = mailbox.mbox(prefs['path'])
     for i in range(prefs['start'], 1000000):
         try:
-            #print i
+            #cont=cont+1
             save_attachments(i,mb)
         except KeyError:
             break
+    
     save_prefs('start',i)
+    #return cont
+
 
 def creat_userDir(path,user):
     directory = path+'/'+user  
